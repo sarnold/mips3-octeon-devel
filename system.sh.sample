@@ -3,19 +3,20 @@
 
 ARCH=$(uname -m)
 
-#ARM Native gcc compiler (running gcc on arm target)
-if [ "x${ARCH}" = "xarmv7l" ] ; then
-	#Native arm gcc compiler
+#MIPS Native gcc compiler (running gcc on mips target)
+match=mips*
+if [[ $ARCH == "$match" ]] ; then
+	#Native mips gcc compiler
 	CC=
 fi
 
 ###REQUIRED:
 
-#ARM GCC CROSS Compiler:
-#if CC is not set, a known working linaro based gcc compiler will be downloaded and utilized.
-#CC=<enter full path>/bin/arm-none-eabi-
-#CC=<enter full path>/bin/arm-linux-gnueabi-
-#CC=<enter full path>/bin/arm-linux-gnueabihf-
+#MIPS GCC CROSS Compiler:
+#if CC is not set, a known working Mentor or Yocto based gcc compiler will be downloaded and utilized.
+#CC=<enter full path>/bin/mips64-unknown-linux-gnueabi-
+#CC=<enter full path>/bin/mips-unknown-linux-gnu-
+#CC=<enter full path>/bin/mips-linux-gnu-
 
 ###OPTIONAL:
 

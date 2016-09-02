@@ -8,9 +8,8 @@ build_prefix="-mips3-x"
 branch_prefix="v"
 branch_postfix=".x"
 
-#arm
-KERNEL_ARCH=arm
-#toolchain="gcc_linaro_gnueabihf_6"
+#mips
+KERNEL_ARCH=mips
 #toolchain="gcc_unknown_linux_gnueabi"
 #toolchain="gcc_unknown_linux_gnu"
 toolchain="gcc_sourcery_mips_4_8"
