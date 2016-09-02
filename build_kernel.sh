@@ -1,6 +1,7 @@
 #!/bin/sh -e
 #
 # Copyright (c) 2009-2016 Robert Nelson <robertcnelson@gmail.com>
+# MIPS changes copyright (c) 2016 Stephen L Arnold <nerdboy@gentoo.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +22,8 @@
 # THE SOFTWARE.
 
 DIR=$PWD
-#CORES=$(getconf _NPROCESSORS_ONLN)
-CORES=2
+CORES=$(getconf _NPROCESSORS_ONLN)
+#CORES=2
 
 mkdir -p "${DIR}/deploy/"
 
