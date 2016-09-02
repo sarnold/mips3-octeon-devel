@@ -22,8 +22,8 @@
 # THE SOFTWARE.
 
 DIR=$PWD
-CORES=$(getconf _NPROCESSORS_ONLN)
-#CORES=2
+#CORES=$(getconf _NPROCESSORS_ONLN)
+CORES=2
 
 mkdir -p "${DIR}/deploy/"
 
@@ -108,8 +108,7 @@ make_kernel () {
 
 	if [ -f ./arch/${KERNEL_ARCH}/boot/${image} ] ; then
 		cp -v arch/${KERNEL_ARCH}/boot/${image} "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}"
-		md5sum "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" | cut -d " " -f 1 | \
-			"${DIR}/deploy/${KERNEL_UTS}.${deploy_image}.md5"
+		md5sum "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" | cut -d " " -f 1 > "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}.md5"
 		cp -v .config "${DIR}/deploy/config-${KERNEL_UTS}"
 	fi
 
