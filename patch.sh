@@ -273,8 +273,8 @@ octeon () {
 #reverts
 #fixes
 octeon
-quieter
-more_fixes
+#quieter
+#more_fixes
 
 packaging () {
 	echo "dir: packaging"
