@@ -21,7 +21,8 @@
 # THE SOFTWARE.
 
 DIR=$PWD
-CORES=$(getconf _NPROCESSORS_ONLN)
+#CORES=$(getconf _NPROCESSORS_ONLN)
+CORES=2
 
 mkdir -p "${DIR}/deploy/"
 
@@ -62,11 +63,16 @@ make_menuconfig () {
 }
 
 make_kernel () {
-	if [ "x${KERNEL_ARCH}" = "xarm" ] ; then
-		image="zImage"
+	ccarch=mips64*
+	if [[ ${KERNEL_ARCH} == mips ]] && [[ $CC == "$ccarch" ]] ; then
+		image="vmlinux.32"
 	else
-		image="Image"
+		image="vmlinux"
 	fi
+
+	# this is needed by the octeon (default) vmlinux target, possibly others
+	deploy_image="vmlinux.64"
+	STRIP="${CC}"strip
 
 	unset address
 
@@ -80,6 +86,8 @@ make_kernel () {
 	echo "make -j${CORES} ARCH=${KERNEL_ARCH} LOCALVERSION=${BUILD} CROSS_COMPILE=\"${CC}\" ${address} ${image} modules"
 	echo "-----------------------------"
 	make -j${CORES} ARCH=${KERNEL_ARCH} LOCALVERSION=${BUILD} CROSS_COMPILE="${CC}" ${address} ${image} modules
+	# more octeon specialness...
+	${STRIP} -o arch/${KERNEL_ARCH}/boot/${image} -s -R .comment ${image}
 	echo "-----------------------------"
 
 	if grep -q dtbs "${DIR}/KERNEL/arch/${KERNEL_ARCH}/Makefile"; then
@@ -91,23 +99,26 @@ make_kernel () {
 
 	KERNEL_UTS=$(cat "${DIR}/KERNEL/include/generated/utsrelease.h" | awk '{print $3}' | sed 's/\"//g' )
 
-	if [ -f "${DIR}/deploy/${KERNEL_UTS}.${image}" ] ; then
-		rm -rf "${DIR}/deploy/${KERNEL_UTS}.${image}" || true
+	# another octeon thing...
+	if [ -f "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" ] ; then
+		rm -rf "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" || true
 		rm -rf "${DIR}/deploy/config-${KERNEL_UTS}" || true
 	fi
 
 	if [ -f ./arch/${KERNEL_ARCH}/boot/${image} ] ; then
-		cp -v arch/${KERNEL_ARCH}/boot/${image} "${DIR}/deploy/${KERNEL_UTS}.${image}"
+		cp -v arch/${KERNEL_ARCH}/boot/${image} "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}"
+		md5sum "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" | cut -d " " -f 1 | \
+			"${DIR}/deploy/${KERNEL_UTS}.${deploy_image}.md5"
 		cp -v .config "${DIR}/deploy/config-${KERNEL_UTS}"
 	fi
 
 	cd "${DIR}/" || exit
 
-	if [ ! -f "${DIR}/deploy/${KERNEL_UTS}.${image}" ] ; then
-		export ERROR_MSG="File Generation Failure: [${KERNEL_UTS}.${image}]"
+	if [ ! -f "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}" ] ; then
+		export ERROR_MSG="File Generation Failure: [${KERNEL_UTS}.${deploy_image}]"
 		/bin/sh -e "${DIR}/scripts/error.sh" && { exit 1 ; }
 	else
-		ls -lh "${DIR}/deploy/${KERNEL_UTS}.${image}"
+		ls -lh "${DIR}/deploy/${KERNEL_UTS}.${deploy_image}"
 	fi
 }
 
