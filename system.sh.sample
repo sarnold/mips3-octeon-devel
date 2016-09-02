@@ -15,7 +15,10 @@ fi
 #MIPS GCC CROSS Compiler:
 #if CC is not set, a known working Mentor or Yocto based gcc compiler will be downloaded and utilized.
 #CC=<enter full path>/bin/mips64-unknown-linux-gnueabi-
-#CC=<enter full path>/bin/mips-unknown-linux-gnu-
+#CC=<enter full path>/bin/mipsel-unknown-linux-gnueabi-
+#CC=<enter full path>/bin/mips64-unknown-linux-gnu-
+#CC=<enter full path>/bin/mipsel-unknown-linux-gnu-
+#CC=<enter full path>/bin/mipsel-linux-gnu-
 #CC=<enter full path>/bin/mips-linux-gnu-
 
 ###OPTIONAL:
