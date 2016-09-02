@@ -1,7 +1,7 @@
 mips3-octeon-devel
 ==================
 
-This is just a set of scripts to rebuild a known working kernel for MIPS devices, mainly Cavium Octeon Edgerouter Lite, etc.  Shamelessly forked and modified from Robert Nelson's MIPS build scripts.
+This is just a set of scripts to rebuild a known working kernel for MIPS devices, mainly Cavium Octeon Edgerouter Lite, etc.  Shamelessly forked and modified from Robert Nelson's ARM build scripts.
 
 Script Bugs:
 
